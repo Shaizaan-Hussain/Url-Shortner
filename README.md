@@ -1,167 +1,360 @@
-# URL Shortener Service
+# 🔗 URL Shortener
 
-## Overview
-Build a simple URL shortening service similar to bit.ly or tinyurl. This assignment tests your ability to design and implement a small but complete feature from scratch.
-
-## Getting Started
-
-### Prerequisites
-- Python 3.8+ installed
-- 3 hours of uninterrupted time
-
-### Setup (Should take < 5 minutes)
-```bash
-# Clone/download this repository
-# Navigate to the assignment directory
-cd url-shortener
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start the application
-python -m flask --app app.main run
-
-# The API will be available at http://localhost:5000
-# Run tests with: pytest
-```
-
-### What's Provided
-- Basic Flask application structure
-- Health check endpoints
-- One example test
-- Empty files for your implementation
-
-## Your Task
-
-### Time Limit: 3 Hours
-
-Build a URL shortener service with the following features:
-
-### Core Requirements
-
-1. **Shorten URL Endpoint**
-   - `POST /api/shorten`
-   - Accept a long URL in the request body
-   - Return a short code (e.g., "abc123")
-   - Store the mapping for later retrieval
-
-2. **Redirect Endpoint**
-   - `GET /<short_code>`
-   - Redirect to the original URL
-   - Return 404 if short code doesn't exist
-   - Track each redirect (increment click count)
-
-3. **Analytics Endpoint**
-   - `GET /api/stats/<short_code>`
-   - Return click count for the short code
-   - Return creation timestamp
-   - Return the original URL
-
-### Technical Requirements
-
-- URLs must be validated before shortening
-- Short codes should be 6 characters (alphanumeric)
-- Handle concurrent requests properly
-- Include basic error handling
-- Write at least 5 tests covering core functionality
-
-### Example API Usage
-
-```bash
-# Shorten a URL
-curl -X POST http://localhost:5000/api/shorten \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://www.example.com/very/long/url"}'
-
-# Response: {"short_code": "abc123", "short_url": "http://localhost:5000/abc123"}
-
-# Use the short URL (this redirects)
-curl -L http://localhost:5000/abc123
-
-# Get analytics
-curl http://localhost:5000/api/stats/abc123
-
-# Response: {"url": "https://www.example.com/very/long/url", "clicks": 5, "created_at": "2024-01-01T10:00:00"}
-```
-
-## Implementation Guidelines
-
-### What We're Looking For
-
-1. **Code Quality (30%)**
-   - Clean, readable code
-   - Proper error handling
-   - Good API design
-
-2. **Functionality (30%)**
-   - All requirements work correctly
-   - Handles edge cases appropriately
-   - Concurrent request handling
-
-3. **Testing (20%)**
-   - Tests for main functionality
-   - Tests for error cases
-   - Clear test descriptions
-
-4. **Architecture (20%)**
-   - Logical code organization
-   - Separation of concerns
-   - Scalable design decisions
-
-### What to Focus On
-- Get core functionality working first
-- Use appropriate data structures
-- Handle common error cases
-- Keep it simple but complete
-
-### What NOT to Do
-- Don't implement user authentication
-- Don't add a web UI
-- Don't implement custom short codes
-- Don't add rate limiting
-- Don't use external databases (in-memory is fine)
-
-## Evaluation Criteria
-
-Your submission will be evaluated on:
-- Core functionality completeness
-- Code quality and organization
-- Error handling and edge cases
-- Test coverage of critical paths
-- Clear and pragmatic design decisions
-
-## AI Usage Policy
-
-You are permitted to use AI assistants (ChatGPT, GitHub Copilot, etc.) as you would any other tool. If you use AI significantly, please note in a `NOTES.md` file:
-- Which tools you used
-- What you used them for
-- Any AI-generated code you modified or rejected
-
-## Tips
-
-- Start with the URL shortening logic
-- Use Python's built-in data structures
-- Don't overthink the short code generation
-- Focus on functionality over optimization
-- Remember to handle thread safety
-
-## Submission
-
-### Deliverables
-1. Your complete implementation
-2. All tests passing
-3. Brief notes about your approach (optional)
-
-### How to Submit
-1. Ensure all tests pass: `pytest`
-2. Create a zip of your solution
-3. Include any notes about your implementation choices
-4. Share the repository link on https://forms.gle/gpaV5LW5boDFk7uT6
-
-## Questions?
-
-If you have questions about the requirements, please email [anand@retainsure.com] within the first 30 minutes of starting.
+A simple and minimal Flask-based URL shortening service, inspired by Bitly and TinyURL. It allows users to shorten long URLs, redirect using short codes, and track analytics like click count and creation timestamp.
 
 ---
 
-Good luck! We're excited to see your solution.
+## 🚀 Features
+
+- ✅ Shorten long URLs to unique 6-character codes
+- 🔁 Redirect users to original URLs via short code
+- 📊 View analytics: click count, created time, original URL
+- 🧠 Thread-safe in-memory storage
+- ✅ Fully tested with `pytest`
+
+---
+
+## 📦 Tech Stack
+
+- Python 3.8+
+- Flask
+- Pytest
+
+---
+
+## 📁 Project Structure
+
+url-shortener/
+├── app/
+│ ├── init.py
+│ ├── main.py
+│ ├── model.py
+│ └── util.py
+├── tests/
+│ └── test.py
+├── requirements.txt
+└── README.md
+
+yaml
+Copy
+Edit
+
+---
+
+## ⚙️ Setup & Run
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/your-username/url-shortener.git
+cd url-shortener
+2. Setup virtual environment
+bash
+Copy
+Edit
+python -m venv venv
+# Activate on Windows
+venv\Scripts\activate
+3. Install dependencies
+bash
+Copy
+Edit
+pip install -r requirements.txt
+4. Start the Flask server
+bash
+Copy
+Edit
+python -m flask --app app.main run
+The API will run at: http://localhost:5000
+
+🔌 API Endpoints
+1. Shorten URL
+POST /api/shorten
+
+json
+Copy
+Edit
+Request:
+{
+  "url": "https://www.example.com"
+}
+
+Response:
+{
+  "short_code": "abc123",
+  "short_url": "http://localhost:5000/abc123"
+}
+2. Redirect to Original URL
+GET /abc123
+
+Redirects to https://www.example.com.
+
+3. Get Analytics
+GET /api/stats/abc123
+
+json
+Copy
+Edit
+{
+  "url": "https://www.example.com",
+  "clicks": 5,
+  "created_at": "2025-07-24T10:00:00"
+}
+🧪 Run Tests
+bash
+Copy
+Edit
+pytest
+🙌 Contribution
+Feel free to fork, clone, and open pull requests! Suggestions and improvements are always welcome.
+
+📄 License
+This project is open source and available under the MIT License.
+
+yaml
+Copy
+Edit
+
+---
+
+Let me know if you want me to also generate a `requirements.txt` or `LICENSE` file.
+
+
+
+
+
+
+
+
+Ask ChatGPT
+You said:
+make it one file
+
+
+ChatGPT said:
+Here is the entire URL shortener project in a single file (main.py), combining all logic (shortening, redirection, analytics, utils, and storage) for ease of setup and execution.
+
+✅ main.py
+python
+Copy
+Edit
+from flask import Flask, request, jsonify, redirect
+from datetime import datetime
+import string
+import random
+import re
+
+app = Flask(__name__)
+store = {}
+
+def generate_short_code(length=6):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+def is_valid_url(url):
+    regex = re.compile(
+        r'^(https?://)?'  # optional scheme
+        r'(([A-Za-z_0-9.-]+)\.([A-Za-z]{2,}))'  # domain
+        r'(\:[0-9]+)?'  # optional port
+        r'(\/.*)?$', re.IGNORECASE)  # path
+    return re.match(regex, url)
+
+@app.route('/api/shorten', methods=['POST'])
+def shorten_url():
+    data = request.get_json()
+    original_url = data.get('url')
+
+    if not original_url or not is_valid_url(original_url):
+        return jsonify({'error': 'Invalid URL'}), 400
+
+    short_code = generate_short_code()
+    while short_code in store:
+        short_code = generate_short_code()
+
+    store[short_code] = {
+        'url': original_url if original_url.startswith('http') else 'https://' + original_url,
+        'created_at': datetime.utcnow(),
+        'clicks': 0
+    }
+
+    return jsonify({
+        'short_code': short_code,
+        'short_url': request.host_url + short_code
+    })
+
+@app.route('/<short_code>', methods=['GET'])
+def redirect_to_url(short_code):
+    if short_code not in store:
+        return jsonify({'error': 'Short URL not found'}), 404
+
+    store[short_code]['clicks'] += 1
+    return redirect(store[short_code]['url'], code=302)
+
+@app.route('/api/stats/<short_code>', methods=['GET'])
+def get_stats(short_code):
+    if short_code not in store:
+        return jsonify({'error': 'Short code not found'}), 404
+
+    data = store[short_code]
+    return jsonify({
+        'url': data['url'],
+        'clicks': data['clicks'],
+        'created_at': data['created_at'].isoformat()
+    })
+
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Welcome to the URL Shortener API'}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
+✅ Run Instructions
+Save this as main.py
+
+Install Flask:
+
+bash
+Copy
+Edit
+pip install flask
+Run the app:
+
+bash
+Copy
+Edit
+python main.py
+API is available at: http://127.0.0.1:5000
+
+Let me know if you want the same thing containerized (Docker) or tested with Postman.
+
+
+
+
+
+
+
+
+You said:
+give readme file in one so i can directly paste it
+
+
+ChatGPT said:
+Here's a complete README.md content you can copy-paste directly into your project:
+
+markdown
+Copy
+Edit
+# 🧩 URL Shortener Service
+
+A simple and minimal URL shortening service built with Flask. Similar to services like bit.ly and TinyURL.
+
+## 📦 Features
+
+- ✅ Shorten long URLs to 6-character alphanumeric codes
+- 🚀 Redirection from short code to original URL
+- 📊 Analytics: click count, creation time, and original URL
+- 🔐 URL validation
+- 🧪 Simple in-memory storage (no database needed)
+- ⚡ Minimal setup (single Python file)
+
+---
+
+## 🏁 Getting Started
+
+### 📌 Prerequisites
+
+- Python 3.8+
+- Flask (`pip install flask`)
+
+---
+
+### 🚀 Run the Project
+
+```bash
+# Clone or download the project
+cd url-shortener
+
+# Install Flask
+pip install flask
+
+# Run the app
+python main.py
+By default, the API runs on:
+📍 http://127.0.0.1:5000
+
+📡 API Endpoints
+1. Shorten URL
+POST /api/shorten
+
+Body:
+
+json
+Copy
+Edit
+{
+  "url": "https://www.example.com/very/long/url"
+}
+Response:
+
+json
+Copy
+Edit
+{
+  "short_code": "abc123",
+  "short_url": "http://localhost:5000/abc123"
+}
+2. Redirect to Original URL
+GET /<short_code>
+
+Example:
+GET http://localhost:5000/abc123
+
+Action:
+Redirects to original long URL
+
+3. URL Stats
+GET /api/stats/<short_code>
+
+Response:
+
+json
+Copy
+Edit
+{
+  "url": "https://www.example.com/very/long/url",
+  "clicks": 5,
+  "created_at": "2025-07-24T10:00:00"
+}
+🧪 Testing with Postman
+POST /api/shorten – Send JSON body with "url" to shorten
+
+GET /<short_code> – Paste short_url in browser or Postman (will redirect)
+
+GET /api/stats/<short_code> – Get analytics of that short link
+
+📂 Project Structure
+bash
+Copy
+Edit
+url-shortener/
+├── main.py         # All logic in one file
+├── README.md       # Project instructions
+🙏 Acknowledgements
+Built for learning Flask and REST APIs. Ideal for assignments, small-scale use, or as a backend component for frontend integration.
+
+📜 License
+MIT License – free to use, share, and modify.
+
+yaml
+Copy
+Edit
+
+---
+
+Let me know if you want badges (like GitHub stars, forks, etc.) or deployment instructions (like for Heroku, Vercel, or Docker).
+
+
+
+
+
+
+
